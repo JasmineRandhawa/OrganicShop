@@ -1,0 +1,69 @@
+<!--Add New Product link-->
+<a routerLink="/admin/products/new" class="btn buttonCSS">New Product</a>
+
+<br />
+<br />
+
+<!--No Products message-->
+<span class="messageLabel" *ngIf="!isAnyProducts"> No products available </span>
+
+<div *ngIf="isAnyProducts">
+
+    <!--Search Products panel-->
+    <div class="searchDivCSS">
+        <span class="searchLabelCSS">Search Product</span>
+        <span class="filterTitleLabelCSS">Title</span>
+        <input #titleQuery class="form-control filterCSS" 
+               (keyup)="filterProducts(titleQuery.value , categoryQuery.value)" />
+        <span class="filterCategoryLabelCSS">Category</span>
+        <input #categoryQuery class="form-control filterCSS" 
+               (keyup)="filterProducts(titleQuery.value ,categoryQuery.value)" />
+    </div>
+
+    <br>
+    <br>
+
+    <!---Products Table--->
+    <table *ngIf="isAnyProducts" class="tableCSS">
+        <!---column headers--->
+        <thead *ngIf="products.length > 0">
+            <th>Product</th>
+            <th>Title</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Image URL</th>
+            <th>Action</th>
+        </thead>
+
+        <!---rows--->
+        <tr *ngFor="let product of filteredProducts">
+
+            <td><img [src]="product.ImageURL" class="imageCSS" /></td>
+            <td>{{product.Title}}</td>
+            <td>{{product.Price | currency:'USD' : true}}</td>
+            <td>{{product.Category.Name}}</td>
+            <!--<td><a href="{{product.ImageURL}}" class="imageURLCSS">{{product.ImageURL}}</a></td> -->
+            <td>{{product.IsActive ? "Yes" : "No"}}</td>
+            <td>
+                <!--Edit Product link-->
+                <button class="btn btn-link editButtonCSS" [routerLink]="['/admin/products/', product.Id]">
+                    <span><i class="fa fa-edit fa-2x"></i></span>
+                </button>
+                 <!--Deactivate Product link-->
+                 <button class="btn btn-link delButtonCSS" (click)="onDeactivate(product)" *ngIf="product.IsActive">
+                    Deactivate
+                </button>
+                 <!--Activate Product link-->
+                <button class="btn btn-link delButtonCSS" (click)="onActivate(product)" *ngIf="!product.IsActive">
+                    Activate
+                </button>
+            </td>
+
+        </tr>
+        
+    </table>
+</div>
+<br />
+<br />
+<br />
+<br />

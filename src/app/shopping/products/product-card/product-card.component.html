@@ -1,0 +1,18 @@
+<!--Product Card-->
+<div class="card cardDivCSS"  *ngIf="cartItem" style="width: 15rem;">
+
+    <img class="card-img-top imageCSS" src="{{cartItem.product.ImageURL}}" 
+         alt="Image not available">
+
+    <!--Card Body-->
+    <div class="card-body">
+        <h5 class="card-title">{{ cartItem.product.Title }}</h5>
+        <p class="card-text">{{ cartItem.product.Price | currency : 'USD':"$"}}</p>
+    </div>
+
+     <!--Card Footer-->
+    <div class="card-footer">
+        <quantity-card [cart-item] = "cartItem"></quantity-card>
+    </div>
+
+</div>

@@ -1,0 +1,58 @@
+<!--Shopping Cart-->
+<span class="heading">Shopping Cart</span>
+
+<br />
+<br />
+
+<!--No Items message-->
+<span class="messageLabel" *ngIf="!cart.isAnyItems"> No items available </span>
+
+<!--Items Count message-->
+<span class="messageLabel" *ngIf="cart.isAnyItems"> 
+    You have <span class="countLabelCSS">{{cart.totalItemsCount}}</span> items in your cart 
+</span>
+
+<br />
+<br />
+
+
+<!---Cart Items Table--->
+<table *ngIf="cart.isAnyItems">
+
+    <!---Column Headers--->
+    <thead>
+        <th>Product</th>
+        <th>Price Per Product</th>
+        <th>Quantity</th>
+        <th>Total Price</th>
+    </thead>
+
+    <!---Data Rows--->
+    <tr *ngFor="let item of cart.items">
+
+        <td><div><img [src]="item.product.ImageURL" class="imageCSS" />{{item.product?.Title}}</div></td>
+        <td>{{item.product.Price | currency :'USD':'$'}}</td>
+        <td><quantity-card [cart-item]="item" ></quantity-card></td>
+        <td><span> {{item.totalPricePerProduct | currency:'USD' : true}}</span></td>
+    </tr>
+
+    <!--Footer Row-->
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><span class="totalPriceLabelCSS">Total : {{cart.totalPrice|currency:'USD' : '$'}}</span></td>
+    </tr>
+
+    <br /><br />
+
+     <!--Buttons for clearing cart or checking out -->
+     <tr>
+        <td><a class="btn buttonCSS"  (click) ="clearCart()">Clear Shopping Cart</a></td>
+        <td></td>
+        <td></td>
+        <td><a class="btn buttonCSS buttonCheckoutCSS" (click) ="checkOut()">Check out</a></td>
+    </tr>
+</table>
+<br />
+<br />

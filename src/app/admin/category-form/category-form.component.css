@@ -1,0 +1,144 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+
+h1{
+    color: lightseagreen;
+}
+
+.mainDivCSS
+{
+  width: 695px; 
+}
+
+.errorSummaryCSS
+{
+    margin-left: 60px; color: rgb(223, 8, 8);
+    float:left;text-align: left; margin-top: 10px;font-size: x-large;
+}
+
+.alert-danger
+{
+font-size: small;width: 260px;
+}
+
+.formDivCSS
+{
+  width: 330px;padding: 5px;display: inline-block;
+}
+
+.formGroupCSS
+{
+  width: 260px;
+}
+
+.formLabelCSS
+{
+  float:left;color: palevioletred;font-weight: bold;font-size: large;
+}
+
+.formControlCSS
+{
+  font-size: 17px;height: 35px;width: 260px;
+}
+
+input.ng-invalid.ng-touched {
+    border: 1px solid red;
+}
+
+.priceCSS
+{
+    width: 260px;
+}
+
+.pricePrefixCSS
+{
+    font-size: 17px;background-color: #ccc;padding-top: 5px;
+}
+
+select.ng-invalid.ng-touched {
+    border: 1px solid red;
+}
+
+.selectCSS
+{
+     height: 38px;width: 260px;
+}
+
+.selectOptionCSS
+{
+    font-size: 17px;color: rgb(134, 131, 131);
+}
+
+.select {
+    border: 1px solid #ccc;
+    overflow: hidden; 
+    height: 38px;    
+    width: 260px;
+    position: relative;
+    display: block;
+}
+
+select{       
+    height: 38px;
+    padding: 5px;
+    border: 0;
+    font-size: 16px;       
+    width: 260px;
+   -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+.select:after {
+    content:"\f0dc";
+    font-family: FontAwesome;
+    color: darkgray;
+    padding: 6px 8px;
+    position: absolute; right: 0; top: 0;
+    background: #ccc;
+    z-index: 1;
+    text-align: center;
+    width: 10%;
+    height: 100%;      
+    pointer-events: none;
+    box-sizing: border-box;   
+}
+
+textarea.ng-invalid.ng-touched {
+    border: 1px solid red;
+}
+
+.imageCSS
+{
+    height:200px; width:250px;border: 2px solid #ccc;
+}
+
+.imageURLCSS
+{
+    height: 100px;font-size: 12px;color: lightseagreen;
+}
+
+.buttonCSS
+{
+    background-color: lightseagreen;
+    color: rgb(121, 118, 118);
+    font-weight: bold;
+    float: left;
+}
+
+.detailsDivCSS
+{
+    display:inline-block;width: 230px;  margin-top: 40px;vertical-align: top;
+}
+
+.subDivCSS
+{
+    border: 2px solid #ccc;width:250px;padding:5px;height:auto;min-height: 150px;
+}
+
+.detailCSS
+{
+    float:left;text-align: left; margin-top: 10px;color:rgb(146, 135, 135) ;font-size: x-large;
+}
+
+.alterImageCSS{
+    height:200px; width:250px;border: 2px solid #ccc;text-align:center;padding-top: 80px;
+}

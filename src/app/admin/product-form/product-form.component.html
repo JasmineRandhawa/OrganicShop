@@ -1,0 +1,112 @@
+<div class="mainDivCSS">
+    <h1>New Product</h1>
+
+     <!--Error Summary -->
+    <div *ngIf="((title.invalid && title.touched) ||  (price.invalid && price.touched) || 
+                 (category.invalid && category.touched) ||  (imageURL.invalid && imageURL.touched))">
+        <h4 class="errorSummaryCSS">
+            <i class="fa fa-exclamation-triangle"></i>
+            Please correct below errors.
+        </h4>
+    </div>
+
+    <br /><br />
+
+    <!--Product Form -->
+    <div class="formDivCSS">
+        <form #form="ngForm" ngForm (ngSubmit)="onSave(form.value)">
+            <!--Title -->
+            <div class="form-group formGroupCSS">
+                <label for="title" class="formLabelCSS">Title</label>
+                <input #title="ngModel" name="title" id="title" [(ngModel)]="currentProduct.Title"  
+                       class="form-control formControlCSS" type="text" required />
+                <div *ngIf="title.touched && title.invalid" class="alert alert-danger">
+                    <div *ngIf="title.errors?.required">The Title field is a required.</div>
+                </div>
+            </div>
+
+            <br />
+             <!--Price -->
+            <div class="form-group formGroupCSS">
+                <label for="price" class="formLabelCSS">Price</label>
+                <div class="input-group ">
+                    <span class="input-group-addon pricePrefixCSS">&nbsp; $ &nbsp;</span>
+                    <input #price="ngModel" name="price" id="price" [(ngModel)]="currentProduct.Price" 
+                           class="form-control formControlCSS priceCSS" type="number" 
+                           required [max]="100" [min]="1" />
+                    <span class="input-group-addon pricePrefixCSS">&nbsp; .00&nbsp;</span>
+                </div>
+                <div *ngIf="price.touched && price.invalid" class="alert alert-danger">
+                    <div *ngIf="price.errors?.required">The price is a required field. </div>
+                    <div *ngIf="price.errors?.max || price.errors?.min">
+                        The Price field should be in range 1$ and 100$
+                    </div>
+                </div>
+            </div>
+
+            <br />
+             <!--Category -->
+            <div class="form-group formGroupCSS">
+                <label for="category" class="formLabelCSS">Category</label>
+                <label class="select">  
+                    <select #category="ngModel"  name="category" id="category" [(ngModel)]="currentProduct.Category.Name"
+                            class="form-control formControlCSS selectCSS" required
+                            (change) ="onCategoryChange(category.value)">
+                        <option *ngFor="let c of categories" [ngValue]="c.Name"
+                                 class="selectOptionCSS" >
+                                {{c.Name}}
+                        </option>
+                    </select>
+                </label>
+                <div *ngIf="category.touched && category.invalid" class="alert alert-danger">
+                    <div *ngIf="category.errors?.required">The Category field is a required. </div>
+                </div>
+            </div>
+
+            <br />
+            <!--Image URL -->
+            <div class="form-group formGroupCSS">
+                <label for="imageURL" class="formLabelCSS">Image URL</label>
+                <textarea #imageURL="ngModel" name="imageURL" id="imageURL" [(ngModel)]="currentProduct.ImageURL"
+                          class="form-control formControlCSS imageURLCSS" type="text" 
+                          aria-multiline="true" rows="4" required url>
+                </textarea>
+                <div *ngIf="imageURL.touched && imageURL.invalid" class="alert alert-danger">
+                    <div *ngIf="imageURL.errors?.required">The Image URL field is a required. </div>
+                    <div *ngIf="imageURL.errors?.url"> The Image URL is invalid.</div>
+                </div>
+            </div>
+
+            <br />
+            <!--Save button -->
+            <div class="form-group formGroupCSS">
+                <button type="submit" class="btn buttonCSS" [disabled]="form.invalid" >Save</button>
+            </div>
+        </form>
+    </div>
+
+    &nbsp;&nbsp;
+
+    <!--Product Details panel -->
+    <div class="detailsDivCSS">
+
+        <!--Render Image -->
+        <img *ngIf="imageURL.value && imageURL.valid" src="{{imageURL.value}}" 
+              class="imageCSS" />
+        <div *ngIf="!imageURL.value ||  imageURL.invalid" class="alterImageCSS"> 
+             Image not available
+        </div>
+        
+         <!--Other Product Details-->
+        <div *ngIf="title.value || price.value || category.value" class="subDivCSS">
+            <span class="detailCSS">{{currentProduct.Title}}</span>
+            <br />
+            <br />
+            <span class="detailCSS">{{currentProduct.Price|currency:'USD':'$'}}</span>
+            <br />
+            <br />
+            <span class="detailCSS">{{currentProduct.Category.Name }}</span>
+        </div>
+    </div>
+</div>
+  

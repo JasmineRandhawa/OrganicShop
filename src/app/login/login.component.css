@@ -1,0 +1,12 @@
+.imageCSS
+{
+    width:200px;
+    height:100px;
+}
+
+.buttonCSS
+{
+    background-color: lightseagreen;
+    color: white;
+    font-weight: bold;
+}

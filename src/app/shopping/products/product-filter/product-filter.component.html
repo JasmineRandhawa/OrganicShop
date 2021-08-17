@@ -1,0 +1,25 @@
+<!--Product Categories list filter-->
+<div class="sticky-top"><!--for scrolling filter bar alongwith page scroll -->
+    
+    <div *ngIf="categories.length > 0">
+
+        <ul class="list-group listCSS">
+            <!--All Categories option-->
+            <li routerLink="/products" [class.active]="category==defaultCategory" 
+                class="list-group-item list-group-item-action">
+
+                <a class="btn listItemLabelCSS">{{defaultCategory}}</a>
+
+            </li>
+
+            <!--Categories list from service-->
+            <li *ngFor="let c of categories" [class.active]="category == c.Name"
+                class="list-group-item list-group-item-action" routerLink="/products/"
+                [queryParams]="{ category : c.Name }">
+
+                <a class="btn listItemLabelCSS">{{c.Name}}</a>
+
+            </li>
+        </ul>
+    </div>
+</div>

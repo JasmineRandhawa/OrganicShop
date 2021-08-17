@@ -1,0 +1,33 @@
+.appLabelCSS{
+    color: palevioletred;font-size: x-large;
+}
+
+.nav-link {
+    font-size: x-large;
+}
+
+.linkLabelCSS{
+    color: lightseagreen;font-weight: bold;
+}
+
+.cartIconCSS
+{
+    color:lightseagreen;
+}
+
+#cartCount {
+    font-size: 15px;
+    background: #ff0000;
+    color: #fff;
+    padding: 2px 5px 2px 2px;
+    vertical-align: top;
+}
+
+.dropdown-toggle
+{
+    cursor: pointer;
+}
+.dropdown-item
+{
+    cursor: pointer;color: lightseagreen;font-size: medium;font-weight: 600;
+}

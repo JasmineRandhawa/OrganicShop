@@ -1,1 +1,6 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~bootstrap/dist/css/bootstrap.css";
+
+nav { margin-left: 10px;}
+
+body { padding-top: 10%; text-align: center} 
+
