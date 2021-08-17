@@ -1,9 +1,8 @@
 import { Category } from 'src/app/models/category';
-
 import { CategoryService } from 'src/app/services/category.service';
 import { showAlertOnAction } from 'src/app/utility/helper';
 
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -11,7 +10,6 @@ import { Router } from '@angular/router';
   templateUrl: './category-form.component.html',
   styleUrls: ['./category-form.component.css']
 })
-/*---Product Form component for creating new category---*/ 
 export class CategoryFormComponent {
 
   category : Category = new Category();
@@ -31,4 +29,5 @@ export class CategoryFormComponent {
     showAlertOnAction("Category" , isSaved, "activate",this.router,"/admin/categories")
   }
   
+
 }

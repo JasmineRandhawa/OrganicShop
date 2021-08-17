@@ -24,14 +24,14 @@ import { MyOrdersComponent } from 'src/app/shopping/my-orders/my-orders.componen
 import { NotAdminComponent } from 'src/app/not-admin/not-admin.component';
 
 import { AdminProductsComponent } from 'src/app/admin/admin-products/admin-products.component';
-import { AdminCategoriesComponent } from 'src/app/admin/admin-categories/admin-categories.component';
 import { AdminOrdersComponent } from 'src/app/admin/admin-orders/admin-orders.component';
 import { ProductFormComponent } from 'src/app/admin/product-form/product-form.component';
-import { CategoryFormComponent } from './admin/category-form/category-form.component';
 import { AdminManageProductsComponent } from 'src/app/admin/admin-manage-products/admin-manage-products.component';
 import { ProductFilterComponent } from 'src/app/shopping/products/product-filter/product-filter.component';
 import { ProductCardComponent } from 'src/app/shopping/products/product-card/product-card.component';
 import { QuantityCardComponent } from 'src/app/shopping/quantity-card/quantity-card.component'
+import { AdminCategoriesComponent } from './admin/admin-categories/admin-categories.component';
+import { CategoryFormComponent } from './admin/category-form/category-form.component';
 
 
 /*---components---*/
