@@ -1,7 +1,9 @@
 import { Category } from 'src/app/models/category';
+import { API } from 'src/app/services/api-service-urls';
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { API } from './api-service-urls';
+
 
 @Injectable()
 

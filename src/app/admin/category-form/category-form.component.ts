@@ -23,6 +23,4 @@ export class CategoryFormComponent {
     let isSaved = await this.categoryService.add(category);
     showAlertOnAction("Category" , isSaved, "create",this.router,"/admin/categories")
   }
-  
-
 }

@@ -1,5 +1,4 @@
-import { Product } from 'src/app/models/product';
-import { API } from './api-service-urls';
+import { API } from 'src/app/services/api-service-urls';
 
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -38,10 +37,10 @@ export class ProductService {
                                     .catch(() => false);
 
   /*---update product details---*/
-  update = (product:any) => this.http.patch(API.UPDATE_PRODUCT_URL,product,this.headerOptions)
-                                .toPromise()
-                                .then((response:any)=> response.status == 200)
-                                .catch(() => false);
+  update = (product:any) => this.http.put(API.UPDATE_PRODUCT_URL,product,this.headerOptions)
+                                            .toPromise()
+                                            .then((response:any)=> response.status == 200)
+                                            .catch(() => false);
 
   /*---activate a product---*/
   activate = (productId:number) => this.http.patch(API.ACTIVATE_PRODUCT_URL+productId ,{},this.headerOptions)

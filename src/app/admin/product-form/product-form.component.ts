@@ -1,4 +1,3 @@
-import { map } from 'rxjs/operators';
 import { Category } from 'src/app/models/category';
 import { Product } from 'src/app/models/product';
 
