@@ -41,23 +41,23 @@
                 (reload)="reloadItems($event)"
     >
         <!--Data Columns-->
+        <data-table-column class="columnHeaderCSS" [property]="'Id'" [header]="'Sr. No.'" [sortable]="true" [resizable]="true">
+            <ng-template #dataTableHeader let-item="item">
+                <span class="columnHeaderCSS">Sr. No.</span>
+            </ng-template>
+
+            <ng-template #dataTableCell let-item="item">
+                <span class="columnCSS">{{item.Id}}</span>
+            </ng-template>
+        </data-table-column>
+
         <data-table-column [property]="'ImageURL'" [header]="'Product'" [sortable]="false" [resizable]="true">
             <ng-template #dataTableHeader let-item="item">
                 <span class="columnHeaderCSS">Product</span>
             </ng-template>
 
             <ng-template #dataTableCell let-item="item">
-                <img [src]="item.ImageURL" class="imageCSS" />
-            </ng-template>
-        </data-table-column>
-
-        <data-table-column class="columnHeaderCSS" [property]="'Title'" [header]="'Title'" [sortable]="true" [resizable]="true">
-            <ng-template #dataTableHeader let-item="item">
-                <span class="columnHeaderCSS">Title</span>
-            </ng-template>
-
-            <ng-template #dataTableCell let-item="item">
-                <span class="columnCSS">{{item.Title}}</span>
+                <div><img [src]="item.ImageURL" class="imageCSS" />{{item.Title}}</div>
             </ng-template>
         </data-table-column>
 
@@ -77,7 +77,10 @@
             </ng-template>
 
             <ng-template #dataTableCell let-item="item">
-                <span class="columnCSS">{{item.Category.Name}}</span>
+                <a class="columnCSS" [routerLink]="['/admin/categories/', item.Category.Name]" >{{item.Category.Name}}
+                    <a *ngIf="item.Category.IsActive" class="isActiveLinkCSS">Active</a>
+                    <a  *ngIf="!item.Category.IsActive" class="isInactiveLinkCSS">Inactive</a>
+                </a>
             </ng-template>
         </data-table-column>
 

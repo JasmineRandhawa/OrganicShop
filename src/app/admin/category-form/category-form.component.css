@@ -12,7 +12,7 @@ h1{
 .errorSummaryCSS
 {
     margin-left: 60px; color: rgb(223, 8, 8);
-    float:left;text-align: left; margin-top: 10px;font-size: x-large;
+    float:left;text-align: left; margin-top: 10px;margin-left: 200px; font-size: x-large;
 }
 
 .alert-danger
@@ -44,76 +44,10 @@ input.ng-invalid.ng-touched {
     border: 1px solid red;
 }
 
-.priceCSS
+.checkboxCss
 {
-    width: 260px;
-}
-
-.pricePrefixCSS
-{
-    font-size: 17px;background-color: #ccc;padding-top: 5px;
-}
-
-select.ng-invalid.ng-touched {
-    border: 1px solid red;
-}
-
-.selectCSS
-{
-     height: 38px;width: 260px;
-}
-
-.selectOptionCSS
-{
-    font-size: 17px;color: rgb(134, 131, 131);
-}
-
-.select {
-    border: 1px solid #ccc;
-    overflow: hidden; 
-    height: 38px;    
-    width: 260px;
-    position: relative;
-    display: block;
-}
-
-select{       
-    height: 38px;
-    padding: 5px;
-    border: 0;
-    font-size: 16px;       
-    width: 260px;
-   -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-.select:after {
-    content:"\f0dc";
-    font-family: FontAwesome;
-    color: darkgray;
-    padding: 6px 8px;
-    position: absolute; right: 0; top: 0;
-    background: #ccc;
-    z-index: 1;
-    text-align: center;
-    width: 10%;
-    height: 100%;      
-    pointer-events: none;
-    box-sizing: border-box;   
-}
-
-textarea.ng-invalid.ng-touched {
-    border: 1px solid red;
-}
-
-.imageCSS
-{
-    height:200px; width:250px;border: 2px solid #ccc;
-}
-
-.imageURLCSS
-{
-    height: 100px;font-size: 12px;color: lightseagreen;
+    height: 30px;
+    width: 30px;
 }
 
 .buttonCSS

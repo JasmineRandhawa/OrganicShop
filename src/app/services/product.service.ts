@@ -11,26 +11,37 @@ import { HttpClient } from '@angular/common/http';
 export class ProductService {
 
  headerOptions : object = {observe : 'response'};
+ advancedODataQueryFilter="?$expand=Category";
 
   /*---Inject http web api client---*/
   constructor(private http:HttpClient) {  
   }
 
   /*---get all active products---*/
-  getAllActive = () => this.http.get(API.GET_ALL_ACTIVE_PRODUCTS_URL,this.headerOptions);
+  getAllActive = () => this.http.get(API.GET_ALL_PRODUCTS_URL + this.advancedODataQueryFilter +
+                                        " & $filter=Category/IsActive and IsActive eq true"
+                                    ,this.headerOptions);
 
    /*---get all products---*/
-  getAll= () => this.http.get(API.GET_ALL_PRODUCTS_URL,this.headerOptions);
+  getAll= () => this.http.get(API.GET_ALL_PRODUCTS_URL + this.advancedODataQueryFilter ,
+                              this.headerOptions);
 
   /*---get product by id---*/
-  getById = (productId:number) => this.http.get(API.GET_PRODUCT_BY_ID_URL + productId + " & $expand=Category", 
-                                                this.headerOptions) ;
+  getById = (productId:number) => this.http.get(API.GET_ALL_PRODUCTS_URL + this.advancedODataQueryFilter +
+                                                   " & $filter = Id eq " + productId,
+                                                this.headerOptions);
 
   /*---add a new product---*/
-   add = (product:Product) => this.http.post(API.ADD_PRODUCT_URL,product,this.headerOptions);
+   add = (product:any) => this.http.post(API.ADD_PRODUCT_URL,product,this.headerOptions)
+                                    .toPromise()
+                                    .then((response:any)=> response.status == 201)
+                                    .catch(() => false);
 
   /*---update product details---*/
-  update = (product:Product) => this.http.patch(API.UPDATE_PRODUCT_URL,product,this.headerOptions);
+  update = (product:any) => this.http.patch(API.UPDATE_PRODUCT_URL,product,this.headerOptions)
+                                .toPromise()
+                                .then((response:any)=> response.status == 200)
+                                .catch(() => false);
 
   /*---activate a product---*/
   activate = (productId:number) => this.http.patch(API.ACTIVATE_PRODUCT_URL+productId ,{},this.headerOptions)
@@ -39,7 +50,7 @@ export class ProductService {
                                             .catch(() => false);
 
    /*---deactivate a product---*/
-   deactivate = (productId:number) => this.http.patch(API.DEACTIVATE_CATEGORY_URL + productId ,{},this.headerOptions)
+   deactivate = (productId:number) => this.http.patch(API.DEACTIVATE_PRODUCT_URL + productId ,{},this.headerOptions)
                                                 .toPromise()
                                                 .then((response:any)=> response.status == 200)
                                                 .catch(() => false);

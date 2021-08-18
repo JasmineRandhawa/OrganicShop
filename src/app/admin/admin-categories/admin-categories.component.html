@@ -9,41 +9,42 @@
 
 <div *ngIf="isAnyCategories">
 
-    <!--Categories Products panel-->
+    <!--Search Categories panel-->
     <div class="searchDivCSS">
-        <span class="searchLabelCSS">Search Product</span>
-        <span class="filterTitleLabelCSS">Title</span>
+        <span class="searchLabelCSS">Search Category</span>
         <span class="filterCategoryLabelCSS">Category</span>
         <input #categoryQuery class="form-control filterCSS" 
-               (keyup)="filterProducts(categoryQuery.value)" />
+               (keyup)="filterCategories(categoryQuery.value)" />
     </div>
 
     <br>
     <br>
 
+    <span class="messageLabel" *ngIf="!isAnyFilteredCategories"> No categories matching criteria found </span>
+
     <!---Categories Table--->
-    <table *ngIf="isAnyCategories" class="tableCSS">
+    <table *ngIf="isAnyFilteredCategories" class="tableCSS">
         <!---column headers--->
-        <thead *ngIf="products.length > 0">
-            <th>Id</th>
+        <thead *ngIf="categories.length > 0">
+            <th>Sr. No.</th>
             <th>Name</th>
+            <th>IsActive</th>
             <th>Action</th>
         </thead>
 
         <!---rows--->
         <tr *ngFor="let category of filteredCategories">
             <td>{{category.Id}}</td>
-            <td><span *ngIf="isEditClicked">{{category.Name}}</span>  
-                <input class="form-control filterCSS" [value]="category.Name" #categoryName
-                       *ngIf="!isEditClicked"/>
+            <td><span *ngIf="!isEditClicked">{{category.Name}}</span>  
+                <input #name="ngModel" name="name" id="name"  class="form-control filterCSS" 
+                  [(ngModel)]="category.Name" *ngIf="isEditClicked"/>
                 <button class="btn btn-link editButtonCSS" *ngIf="!isEditClicked" (click) = "isEditClicked = true;">
                     <span><i class="fa fa-edit fa-2x"></i></span>
                 </button>
-                <button class="btn btn-link editButtonCSS" *ngIf="isEditClicked" (click) = "OnUpdate(category, categoryName.value)">
+                <button class="btn btn-link editButtonCSS" *ngIf="isEditClicked" (click) = "OnUpdate(category)">
                     <span><i class="fa fa-check fa-2x"></i></span>
                 </button>
-                <span><i class="fa fa-edit fa-2x"></i></span>
-            </button></td>
+            </td>
             <td>{{category.IsActive ? "Yes" : "No"}}</td>
             <td>
                  <!--Deactivate Category link-->

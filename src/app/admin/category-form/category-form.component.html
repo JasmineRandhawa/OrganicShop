@@ -11,10 +11,10 @@
 
     <br /><br />
 
-    <!--Product Form -->
+    <!--Category Form -->
     <div class="formDivCSS">
         <form #form="ngForm" ngForm (ngSubmit)="onSave(form.value)">
-            <!--Title -->
+            <!--Name -->
             <div class="form-group formGroupCSS">
                 <label for="name" class="formLabelCSS">Name</label>
                 <input #name="ngModel" name="name" id="name" [(ngModel)]="category.Name"  
@@ -25,13 +25,12 @@
             </div>
 
             <br />
-             <!--Category -->
+             <!--IsActive -->
             <div class="form-group formGroupCSS">
                 <label for="isActive" class="formLabelCSS">Is Active In System</label>
-                <label class="select">  
+                <label>  
                     <input
-                        type="checkbox" name="isActive" id="isActive" #isActive = "ngModel"
-                        (change)="OnChangeIsActive(isActive.checked)"
+                        type="checkbox" class="checkboxCss" name="isActive" id="isActive" #isActive = "ngModel"
                         [(ngModel)]="category.IsActive"/> `
                 </label>
             </div>

@@ -76,6 +76,16 @@
                     <div *ngIf="imageURL.errors?.url"> The Image URL is invalid.</div>
                 </div>
             </div>
+            <br />
+            <!--IsActive -->
+            <div class="form-group formGroupCSS">
+                <label for="isActive" class="formLabelCSS">Is Active In System</label>
+                <label>  
+                    <input
+                        type="checkbox" class="checkboxCss" name="isActive" id="isActive" #isActive = "ngModel"
+                        [(ngModel)]="currentProduct.IsActive"/> 
+                </label>
+            </div>
 
             <br />
             <!--Save button -->

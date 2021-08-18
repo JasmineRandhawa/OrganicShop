@@ -2,7 +2,7 @@ import { Category } from 'src/app/models/category';
 import { CategoryService } from 'src/app/services/category.service';
 import { showAlertOnAction } from 'src/app/utility/helper';
 
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -18,15 +18,10 @@ export class CategoryFormComponent {
   constructor(private categoryService: CategoryService, private router: Router) {   
   }
 
-  /*---on change IsActiveValues---*/ 
-  OnChangeIsActive(isActive:boolean) {
-    this.category.IsActive = true ;
-  }
-
   /*---add new category---*/ 
   async onSave(category:Category) {
     let isSaved = await this.categoryService.add(category);
-    showAlertOnAction("Category" , isSaved, "activate",this.router,"/admin/categories")
+    showAlertOnAction("Category" , isSaved, "create",this.router,"/admin/categories")
   }
   
 

@@ -1,7 +1,7 @@
 import { compare , isEmpty , showAlertOnAction } from 'src/app/utility/helper';
 
 import { Component, OnDestroy } from '@angular/core';
-import {  Router } from '@angular/router';
+import {  ActivatedRoute, Router } from '@angular/router';
 
 import { Subscription } from 'rxjs';
 import { CategoryService } from 'src/app/services/category.service';
@@ -20,15 +20,17 @@ export class AdminCategoriesComponent  implements OnDestroy{
   /*---class property declarations---*/ 
   isEditClicked = false;
   categories: Category[] = [];
+  categoryParam : string = "";
   filteredCategories: Category[] = [];
   categoriesSubscription: Subscription | undefined;
+  paramsSubscription: Subscription | undefined;
 
   /*----Initialize properties from firebase database----*/ 
-  constructor(private categoryService: CategoryService, private router:Router) {
+  constructor(private categoryService: CategoryService, private router:Router, private route:ActivatedRoute) {
 
     // get list of products from firebase to populate the table
     this.categoriesSubscription = this.categoryService
-                                      .getAllActive()
+                                      .getAll()
                                       .subscribe((response:any) =>  {
                                         if(response.status == 200)
                                         {
@@ -41,7 +43,17 @@ export class AdminCategoriesComponent  implements OnDestroy{
                                                                             Name : category.name, 
                                                                             IsActive : category.isActive };
                                               this.categories?.push(categoryObj);
-                                            })
+                                              this.filteredCategories?.push(categoryObj);
+                                            });
+
+                                                //whenever the url category filter param changes , filter the products
+                                              this.categoriesSubscription = this.route.paramMap
+                                                                                .subscribe(params => {
+                                                                                  this.categoryParam = params.get('Name') || "";
+                                                                                  if(this.categoryParam != "")
+                                                                                      this.filterCategories(this.categoryParam);
+                                                                                  
+                                                                                });  
                                           }
                                         }
                                         else
@@ -49,21 +61,26 @@ export class AdminCategoriesComponent  implements OnDestroy{
                                           console.log(response.status , response.body)
                                           alert("An unexpected error from API : Response Code: "+ response.status);
                                         }
-                                      });  
+                                      });
   }
 
   /*---Check if any categories are available---*/
   get isAnyCategories()
   {
+    return this.categories.length > 0
+  }
+
+  get isAnyFilteredCategories()
+  {
     return this.filteredCategories.length > 0
   }
 
   /*----Filter Categories table on Search----*/ 
-  filterProducts(categoryFilter: string) {
+  filterCategories(categoryFilter: string) {
+    
     if(this.categories.length > 0)
     {
       this.filteredCategories = this.categories;
-      
       if(!isEmpty(categoryFilter))
         this.filteredCategories = this.categories
                                     .filter((category) =>
@@ -72,11 +89,10 @@ export class AdminCategoriesComponent  implements OnDestroy{
   }
 
   /*---update existing category---*/ 
-  async OnUpdate(category:Category, categoryName: string) {
+  async OnUpdate(category:Category) {
     let isUpdated = await this.categoryService.update(category);
     if (isUpdated) 
     {
-      category.Name = categoryName.trim();
       this.isEditClicked=false;
     }   
     else
@@ -104,5 +120,6 @@ export class AdminCategoriesComponent  implements OnDestroy{
   /*---Unsubscribe from category service once the component is destroyed---*/ 
   ngOnDestroy(): void {
     this.categoriesSubscription?.unsubscribe();
+    this.paramsSubscription?.unsubscribe();
   }
 }

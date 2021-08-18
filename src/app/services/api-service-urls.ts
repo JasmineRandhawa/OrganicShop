@@ -8,9 +8,8 @@ export enum API {
     DEACTIVATE_CATEGORY_URL  = "https://localhost:5001/Api/Categories/Deactivate/",
 
 
-    GET_ALL_ACTIVE_PRODUCTS_URL  = "https://localhost:5001/Api/Products/All?$filter=IsActive eq true & $expand=Category",
-    GET_ALL_PRODUCTS_URL  = "https://localhost:5001/Api/Products/All?$expand=Category",
-    GET_PRODUCT_BY_ID_URL  = "https://localhost:5001/Api/Products/All?$filter=Id eq ",
+    GET_ALL_PRODUCTS_URL  = "https://localhost:5001/Api/Products/All",
+    GET_PRODUCT_BY_ID_URL  = "https://localhost:5001/Api/Products/All",
     ADD_PRODUCT_URL  = "https://localhost:5001/Api/Products/Add",
     UPDATE_PRODUCT_URL  = "https://localhost:5001/Api/Products/Update",
     ACTIVATE_PRODUCT_URL  = "https://localhost:5001/Api/Products/Activate/",

@@ -36,27 +36,7 @@ import { CategoryFormComponent } from './admin/category-form/category-form.compo
 
 /*---components---*/
 export const components : any[] = [
-    AppComponent,
-    NavbarComponent,
-    HomeComponent,
-    ProductsComponent,
-    ShoppingCartComponent,
-    NotFoundComponent,
-
-    LoginComponent,
-    CheckOutComponent,
-    MyOrdersComponent,
-    NotAdminComponent,
-
-    AdminProductsComponent,
-    AdminCategoriesComponent,
-    AdminOrdersComponent,
-    ProductFormComponent,
-    CategoryFormComponent,
-    AdminManageProductsComponent,
-    ProductFilterComponent,
-    ProductCardComponent,
-    QuantityCardComponent
+    
 ];
 
 /*---services---*/
@@ -83,6 +63,7 @@ export const routes: Routes = [
   { path: 'admin/products/:id', component: ProductFormComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
   { path: 'admin/products', component: AdminProductsComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
   { path: 'admin/categories/new', component: CategoryFormComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
+  { path: 'admin/categories/:Name', component: AdminCategoriesComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
   { path: 'admin/categories', component: AdminCategoriesComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
   { path: 'admin/manage-products', component: AdminManageProductsComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
   { path: 'admin/orders', component: AdminOrdersComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},

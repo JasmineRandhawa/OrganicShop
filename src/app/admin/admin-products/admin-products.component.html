@@ -23,25 +23,33 @@
     <br>
     <br>
 
+    <span class="messageLabel" *ngIf="!isAnyFilteredProducts"> No products matching criteria found </span>
+
+
     <!---Products Table--->
-    <table *ngIf="isAnyProducts" class="tableCSS">
+    <table *ngIf="isAnyFilteredProducts" class="tableCSS">
         <!---column headers--->
         <thead *ngIf="products.length > 0">
+            <th>Sr. No.</th>
             <th>Product</th>
-            <th>Title</th>
             <th>Price</th>
             <th>Category</th>
-            <th>Image URL</th>
+            <th>IsActive</th>
             <th>Action</th>
         </thead>
 
         <!---rows--->
         <tr *ngFor="let product of filteredProducts">
-
-            <td><img [src]="product.ImageURL" class="imageCSS" /></td>
-            <td>{{product.Title}}</td>
+            <td>{{product.Id}}</td>
+            <td><div><img [src]="product.ImageURL" class="imageCSS" />{{product.Title}}</div></td>
             <td>{{product.Price | currency:'USD' : true}}</td>
-            <td>{{product.Category.Name}}</td>
+            <td>
+                <a class="columnCSS" [routerLink]="['/admin/categories/', product.Category.Name]" >
+                    {{product.Category.Name}}
+                    <a *ngIf="product.Category.IsActive" class="isActiveLinkCSS">Active</a>
+                    <a  *ngIf="!product.Category.IsActive" class="isInactiveLinkCSS">Inactive</a>
+                </a>
+            </td>
             <!--<td><a href="{{product.ImageURL}}" class="imageURLCSS">{{product.ImageURL}}</a></td> -->
             <td>{{product.IsActive ? "Yes" : "No"}}</td>
             <td>

@@ -56,6 +56,20 @@
     height: 100px;font-size: 13px;color: lightseagreen;word-wrap: break-word;cursor: pointer;
 }
 
+.isActiveLinkCSS 
+{
+    color: red;
+    font-weight: normal;
+    font-size: small;
+}   
+
+.isInactiveLinkCSS 
+{
+    color: lightcoral;
+    font-weight: normal;
+    font-size: small;
+}   
+
 .editButtonCSS
 {
     color: lightseagreen;

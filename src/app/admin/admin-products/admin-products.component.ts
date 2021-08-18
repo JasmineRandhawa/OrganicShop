@@ -43,12 +43,17 @@ export class AdminProductsComponent  implements OnDestroy{
                                     });    
   }
 
-  /*---Check if any products are available---*/
-  get isAnyProducts()
-  {
-    return this.filteredProducts.length > 0
-  }
-
+    /*---Check if any categories are available---*/
+    get isAnyProducts()
+    {
+      return this.products.length > 0
+    }
+  
+    get isAnyFilteredProducts()
+    {
+      return this.filteredProducts.length > 0
+    }
+  
   /*----Filter Products table on Search----*/ 
   filterProducts(titleFilter: string , categoryFilter: string) {
     if(this.products.length > 0)

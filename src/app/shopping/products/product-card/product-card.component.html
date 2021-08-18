@@ -8,6 +8,7 @@
     <div class="card-body">
         <h5 class="card-title">{{ cartItem.product.Title }}</h5>
         <p class="card-text">{{ cartItem.product.Price | currency : 'USD':"$"}}</p>
+        <p class="card-text">{{ cartItem.product.Category.Name }}</p>
     </div>
 
      <!--Card Footer-->

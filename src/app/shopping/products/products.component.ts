@@ -43,6 +43,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
                                     if(response.status == 200)
                                     {
                                       let products = response.body as Product[];
+                                      console.log(products);
                                       if(products && products.length > 0)
                                           products.map((product) => { 
                                             this.cartSubscription = this.cartService

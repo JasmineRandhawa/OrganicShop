@@ -25,10 +25,16 @@ export class CategoryService {
                                                 this.headerOptions) ;
 
   /*---add a new category--*/
-   add = (category:Category) => this.http.post(API.ADD_CATEGORY_URL,category,this.headerOptions);
+   add = (category:Category) => this.http.post(API.ADD_CATEGORY_URL,category,this.headerOptions)
+                                            .toPromise()
+                                            .then((response:any)=> response.status == 201)
+                                            .catch(() => false);
 
   /*---update category details---*/
-  update = (category:Category) => this.http.patch(API.UPDATE_CATEGORY_URL,category,this.headerOptions);
+  update = (category:Category) =>  this.http.patch(API.UPDATE_CATEGORY_URL,category,this.headerOptions)
+                                            .toPromise()
+                                            .then((response:any)=> response.status == 200)
+                                            .catch(() => false);
 
   /*---activate a category--*/
   activate = (categoryId:number) => this.http.patch(API.ACTIVATE_CATEGORY_URL+categoryId ,{},this.headerOptions)

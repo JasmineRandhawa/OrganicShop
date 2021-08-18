@@ -35,7 +35,9 @@ export class ProductFormComponent implements OnDestroy {
     let paramValue = this.route.snapshot.paramMap.get("id");                                        
     this.paramId = paramValue ? (+paramValue) : 0;
     console.log(this.paramId);
-
+    
+    if(this.paramId > 0)
+    {
     //get existing product from firebase matching the above param id                                 
     this.productSubscription =  this.productService
                                       .getById(this.paramId)
@@ -43,6 +45,7 @@ export class ProductFormComponent implements OnDestroy {
                                         if(response.status == 200)
                                         {
                                           let products = response.body as Product[];
+                                          console.log(products);
                                           if(products && products.length > 0)
                                              this.currentProduct = products[0];
                                         }
@@ -52,10 +55,13 @@ export class ProductFormComponent implements OnDestroy {
                                           alert("An unexpected error from API : Response Code: "+ response.status);
                                         }
                                       }); 
+    }
+    else
+      this.currentProduct.IsActive = true;
 
     // get product categories from firebase to populate product category dropdown
     this.categoriesSubscription = this.categoryService
-                                      .getAllActive()
+                                      .getAll()
                                       .subscribe((response:any) =>  {
                                         if(response.status == 200)
                                         {
@@ -91,22 +97,24 @@ export class ProductFormComponent implements OnDestroy {
 
   /*---save new  or update existing product---*/ 
   async onSave(product: any) {
- 
-    let objToBeSaved =  { title : product.title.trim() , 
-                          price : product.price, 
-                          category : this.currentProduct.Category,
-                          imageURL :product.imageURL.trim() };
+    console.log(product)
+    let objToBeSaved =  { Title : product.title.trim() , 
+                                  Price : product.price, 
+                                  CategoryId : this.currentProduct.Category.Id,
+                                  ImageURL :product.imageURL.trim(), 
+                                  IsActive: product.isActive};
     
+
     //update existing object
     if (this.paramId) {
-      let updatedProduct = await this.productService.update(this.currentProduct);
+      let updatedProduct = await this.productService.update(objToBeSaved);
       showAlertOnAction("Product", updatedProduct,"update",this.router,'/admin/products');
     }
     
     //save new object
     else {
-      let newProduct = await this.productService.update(this.currentProduct);
-      showAlertOnAction("Product", newProduct,"save",this.router,'/admin/products');
+      let newProduct = await this.productService.add(objToBeSaved);
+      showAlertOnAction("Product", newProduct,"create",this.router,'/admin/products');
     }
   }
 

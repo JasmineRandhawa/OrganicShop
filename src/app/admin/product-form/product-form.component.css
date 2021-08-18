@@ -116,6 +116,13 @@ textarea.ng-invalid.ng-touched {
     height: 100px;font-size: 12px;color: lightseagreen;
 }
 
+.checkboxCss
+{
+    height: 30px;
+    width: 30px;
+}
+
+
 .buttonCSS
 {
     background-color: lightseagreen;
