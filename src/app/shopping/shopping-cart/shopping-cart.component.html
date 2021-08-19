@@ -30,8 +30,8 @@
     <!---Data Rows--->
     <tr *ngFor="let item of cart.items">
 
-        <td><div><img [src]="item.product.ImageURL" class="imageCSS" />{{item.product?.Title}}</div></td>
-        <td>{{item.product.Price | currency :'USD':'$'}}</td>
+        <td><div><img [src]="item.product.imageURL" class="imageCSS" />{{item.product?.title}}</div></td>
+        <td>{{item.product.price | currency :'USD':'$'}}</td>
         <td><quantity-card [cart-item]="item" ></quantity-card></td>
         <td><span> {{item.totalPricePerProduct | currency:'USD' : true}}</span></td>
     </tr>

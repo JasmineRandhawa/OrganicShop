@@ -1,9 +1,8 @@
-import { Order } from 'src/app/models/order';
-
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 
 import { Observable } from 'rxjs';
+import { Order } from '../models/domain/order';
 
 @Injectable()
 

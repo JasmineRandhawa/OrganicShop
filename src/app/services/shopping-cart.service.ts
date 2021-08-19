@@ -1,94 +1,85 @@
-import { ShoppingCartItem } from 'src/app/models/shopping-cart-item';
-import { ShoppingCart } from 'src/app/models/shopping-cart';
-
-import { isEmpty, getCartIdFromLocalStorage } from 'src/app/utility/helper';
-
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-import { Observable } from 'rxjs';
+import { ShoppingCartRequestDto } from './../models/data-transfer-objects/ApiRequests/shopping-cart-request-dto';
+import { ShoppingCartItemRequestDto } from '../models/data-transfer-objects/ApiRequests/shopping-cart-item-request-dto';
+import { API } from './api-service-urls';
 
 @Injectable()
 
-/*---Shopping Cart Service to get/save/update/delete 
-     shopping-cart data from firebase database---*/
+/*---Shopping Cart Service to get/save/update/delete shopping-cart and shopping-cart-Items data from API---*/
 export class ShoppingCartService {
 
-  /*---class property declarations---*/
+  headerOptions : object = {observe : 'response'};
 
-
-  /*---Inject angular fire database---*/
-  constructor(private db: AngularFireDatabase) {
-
+  /*---Inject http web api client---*/
+  constructor(private http:HttpClient) {  
   }
 
-  /*---get all carts in the shopping-carts table---*/
-  getAll(): Observable<ShoppingCart[]>
-  {
-    return this.db.list<ShoppingCart>('shopping-carts').valueChanges();
+  /*---get all active products---*/
+  getCartByUser = (userId : string) : Observable<Object | null> => 
+    this.http.get(API.GET_CART_BY_USER + userId , this.headerOptions)
+              .pipe(
+                  catchError((error) => this.handleError(error))
+                );
+
+   /*---get all products---*/
+  getCartById= (cartId : number) : Observable<Object | null> => 
+    this.http.get(API.GET_CART_BY_ID + cartId , this.headerOptions)
+            .pipe(
+              catchError((error) => this.handleError(error))
+            );
+
+  /*---add a new Cart---*/
+  addNewCart = (cart : any) : Promise<Boolean> => 
+    this.http.post(API.ADD_CART_URL , cart , this.headerOptions)
+        .toPromise()
+        .then((response:any) => response.status == 201)
+        .catch(() => false);
+
+  /*---add Cart item details in Cart---*/
+  addCartItem = (cartItem : any) : Promise<string|undefined> => 
+    this.http.post(API.ADD_CART_ITEM_URL , cartItem , this.headerOptions)
+              .toPromise()
+              .then((response : any) => 
+              {
+                console.log(response.body);
+                console.log(response.status);
+                if(response.status == 201) 
+                {
+                  console.log(response.body);
+                  return response.body as string 
+                }
+                else return "";
+              })
+              .catch(() => undefined);
+
+  /*---add Cart item details in Cart---*/
+  updateCartItem = (cartItem : any) : Promise<Boolean> => 
+    this.http.patch(API.UPDATE_CART_ITEM_URL , cartItem , this.headerOptions)
+            .toPromise()
+            .then((response : any) => response.status == 200)
+            .catch(() => false);
+
+
+  /*---delete an item from Cart---*/
+  removeItemFromCart = (cartItemId : number) : Promise<Boolean> =>
+    this.http.delete(API.DELETE_ITEM_FROM_CART_URL+ cartItemId , this.headerOptions)
+            .toPromise()
+            .then((response : any) => response.status == 204)
+            .catch(() => false);
+  
+  /*---delete all items from Cart---*/
+  removeAllFromCart = (cartId : number) : Promise<Boolean> => 
+    this.http.delete(API.DELETE_ALL_FROM_CART_URL + cartId , this.headerOptions)
+              .toPromise()
+              .then((response : any) => response.status == 204)
+              .catch(() => false);
+
+  handleError(error: any) : Observable<null> {
+    console.log("An unexpected error occured! from api service. " , error);
+    return of(null);
   }
-
-  /*---Get Shopping cart Item based on cartUId---*/
-  getCart(cartUId :string) : Observable<any|null>
-  {
-    return this.getCartRef(cartUId).valueChanges();
-  }
-
-  getItem(cartUId :string , itemUId:string) 
-  {
-    return this.db.object('/shopping-carts/'+ cartUId + '/items/' + itemUId).valueChanges();
-  }
-
- /*---add product shopping cart to firebase database--*/
-  async addToCart(cart:any) {
-    let cartUId = this.db.list('/shopping-carts/').push(cart).key || "";
-    if(!isEmpty(cartUId))
-    {
-      this.getCartRef(cartUId).update( { cartUId: cartUId });
-    }
-  }
-
-  async updateCart(item : ShoppingCartItem)
-  {
-    let cartUId = getCartIdFromLocalStorage();
-
-    let item$ = this.getCartItem(cartUId , item.product.Id+"");
-    item$.update(item);
-  }
-
-  async removeFromCart(itemUId : string)
-  {
-    let cartUId = getCartIdFromLocalStorage();
-    this.getCartItem(cartUId, itemUId).remove();
-  }
-
-  /*---delete existing shopping cart from firebase database based on shopping-cart's unique Id--*/
-  async deleteCart() : Promise<boolean>  {
-    let cartUId = getCartIdFromLocalStorage();
-   
-    return this.getCartRef(cartUId)
-               .remove()
-               .then(()=>
-                { 
-                  localStorage.removeItem('cartUId'); 
-                  return true;
-                })
-               .catch(()=>false);
-  }
-
-  /*---------------------------Private Methods-------------------------*/
-
-  /*---Get Shopping cart Item based on cartUId and product's unique Id---*/
-  private getCartItem(cartUId :string , itemUId:string) 
-  {
-    return this.db.object('/shopping-carts/'+ cartUId + '/items/' + itemUId);
-  }
-
-  /*---Get Shopping cart Item based on cartUId---*/
-  private getCartRef(cartUId :string) : AngularFireObject<unknown>
-  {
-    return this.db.object('/shopping-carts/' + cartUId);
-  }
-
-  /*-------------------------------------------------------------------*/
 }

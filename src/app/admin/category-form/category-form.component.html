@@ -17,7 +17,7 @@
             <!--Name -->
             <div class="form-group formGroupCSS">
                 <label for="name" class="formLabelCSS">Name</label>
-                <input #name="ngModel" name="name" id="name" [(ngModel)]="category.Name"  
+                <input #name="ngModel" name="name" id="name" [(ngModel)]="category.name"  
                        class="form-control formControlCSS" type="text" required />
                 <div *ngIf="name.touched && name.invalid" class="alert alert-danger">
                     <div *ngIf="name.errors?.required">The Name field is a required.</div>
@@ -31,7 +31,7 @@
                 <label>  
                     <input
                         type="checkbox" class="checkboxCss" name="isActive" id="isActive" #isActive = "ngModel"
-                        [(ngModel)]="category.IsActive"/> `
+                        [(ngModel)]="category.isActive"/> `
                 </label>
             </div>
             <br />

@@ -1,4 +1,4 @@
-<!--Add New Product link-->
+<!--Add New Category link-->
 <a routerLink="/admin/categories/new" class="btn buttonCSS">New Category</a>
 
 <br />
@@ -34,31 +34,38 @@
 
         <!---rows--->
         <tr *ngFor="let category of filteredCategories">
-            <td>{{category.Id}}</td>
-            <td><span *ngIf="!isEditClicked">{{category.Name}}</span>  
+
+            <td>{{category.id}}</td>
+
+            <td>
+                <span *ngIf="!category.isEdit">{{category.name}}</span>  
+
                 <input #name="ngModel" name="name" id="name"  class="form-control filterCSS" 
-                  [(ngModel)]="category.Name" *ngIf="isEditClicked"/>
-                <button class="btn btn-link editButtonCSS" *ngIf="!isEditClicked" (click) = "isEditClicked = true;">
+                  [(ngModel)]="category.name" *ngIf="category.isEdit"/>
+
+                <button class="btn btn-link editButtonCSS" *ngIf="!category.isEdit" (click) = "category.isEdit = true;">
                     <span><i class="fa fa-edit fa-2x"></i></span>
                 </button>
-                <button class="btn btn-link editButtonCSS" *ngIf="isEditClicked" (click) = "OnUpdate(category)">
+
+                <button class="btn btn-link editButtonCSS" *ngIf="category.isEdit" (click) = "OnUpdate(category)">
                     <span><i class="fa fa-check fa-2x"></i></span>
                 </button>
             </td>
-            <td>{{category.IsActive ? "Yes" : "No"}}</td>
+
+            <td>{{category.isActive ? "Yes" : "No"}}</td>
+
             <td>
                  <!--Deactivate Category link-->
-                 <button class="btn btn-link delButtonCSS" (click)="onDeactivate(category)" *ngIf="category.IsActive">
+                 <button class="btn btn-link delButtonCSS" (click)="onDeactivate(category)" *ngIf="category.isActive">
                     Deactivate
                 </button>
                  <!--Activate Category link-->
-                <button class="btn btn-link delButtonCSS" (click)="onActivate(category)" *ngIf="!category.IsActive">
+                <button class="btn btn-link delButtonCSS" (click)="onActivate(category)" *ngIf="!category.isActive">
                     Activate
                 </button>
             </td>
 
         </tr>
-        
     </table>
 </div>
 <br />

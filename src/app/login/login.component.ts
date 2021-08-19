@@ -1,7 +1,7 @@
-import { AuthService } from 'src/app/services/auth.service';
-
 import { Component} from '@angular/core';
 import { Router } from '@angular/router';
+
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'login',
@@ -13,11 +13,11 @@ import { Router } from '@angular/router';
 export class LoginComponent {
 
   /*---Inject auth service and router---*/
-  constructor(private authService: AuthService, private router:Router) {
+  constructor(private authService : AuthService , private router : Router) {
    }
 
   /*---Login with Google account---*/
-  login() {
+  login() :void {
 
     this.authService.login();
 

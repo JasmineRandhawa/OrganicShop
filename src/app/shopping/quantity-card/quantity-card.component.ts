@@ -1,107 +1,100 @@
-import { LoggedInUser } from 'src/app/models/logged-in-user';
-import { AppUser } from 'src/app/models/app-user';
-
-import { ShoppingCartItem } from 'src/app/models/shopping-cart-item';
+import { Component, Input } from '@angular/core';
+import { ShoppingCartItemDto } from '../../models/data-transfer-objects/ApiResponses/shopping-cart-item-dto';
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
-import { AuthService } from 'src/app/services/auth.service';
-
-import { getCartIdFromLocalStorage, getCurrentDate, isEmpty } from 'src/app/utility/helper';
-
-import { Component, Input, OnDestroy } from '@angular/core';
-
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
-
+import { ShoppingCartRequestDto } from 'src/app/models/data-transfer-objects/ApiRequests/shopping-cart-request-dto';
+import { ShoppingCartItemRequestDto } from 'src/app/models/data-transfer-objects/ApiRequests/shopping-cart-item-request-dto';
 
 @Component({
   selector: 'quantity-card',
   templateUrl: './quantity-card.component.html',
   styleUrls: ['./quantity-card.component.css']
 })
-export class QuantityCardComponent implements OnDestroy {
+export class QuantityCardComponent {
 
-   /*---class property declarations---*/
-  @Input('cart-item') cartItem: ShoppingCartItem | undefined;
-  loggedInUser : LoggedInUser = new LoggedInUser();
-  userSubscription: Subscription;
+  /*---class property declarations---*/
+  @Input('cart-item') cartItem : ShoppingCartItemDto | undefined
+  @Input('app-user-id') appUserId : string | undefined
 
   /*---Inject shopping cart service---*/
-  constructor(private authService:AuthService,private cartService:ShoppingCartService) { 
-    //get loggedinUser
-    this.userSubscription = this.authService
-                                .appUser$
-                                .pipe(take(1))
-                                .subscribe((appUser :AppUser | null) => {
-                                  if(appUser) this.loggedInUser = new LoggedInUser(appUser.uId, appUser.name);
-                                });
-                          }
+   constructor(private cartService : ShoppingCartService){
 
-  /*---add product to Cart---*/
-  addToCart()
-  {
-    let cartUId = getCartIdFromLocalStorage();
-    if(!isEmpty(cartUId))
+   }
+ 
+  addToCart(cartItem : ShoppingCartItemDto | undefined , appUserId : any) {
+    if(cartItem)
     {
-      this.updateCart();
-      return;
+      if (cartItem.shoppingCartId > 0) 
+        this.addCartItemToExistingCart(cartItem);
+      else
+        this.createNewCartWithCartItem(cartItem,appUserId);
     }
-    this.createAndAddToCart();
   }
 
-  /*--First time add a cart entry--*/
-  createAndAddToCart()
-  {
-    if(this.cartItem)
-    {
+  async addCartItemToExistingCart(cartItem : ShoppingCartItemDto) : Promise<void> {
+      cartItem.quantity = 1;
+      if(this.cartItem)
+        this.cartItem.quantity = 1;
+      console.log("Added cart Item to existing Cart" ,  cartItem);
+
+      let newItemId = await this.cartService.addCartItem(cartItem);
+      if(newItemId && newItemId!="" && this.cartItem) 
+        this.cartItem.id = +newItemId;          
+  }
+
+  createNewCartWithCartItem(cartItem : ShoppingCartItemDto , 
+                            appUserId : string|undefined) : void {
+      cartItem.quantity = 1;
+      if(this.cartItem)
       this.cartItem.quantity = 1;
-      let itemsMap : { [productId : string] : ShoppingCartItem } = {} ;
-      itemsMap[this.cartItem.product.Id] = this.cartItem;
-
-      let cart = { cartUId : "", dateCreated : getCurrentDate(),
-                  user: this.loggedInUser, items: itemsMap};
-      this.cartService.addToCart(cart);
-    }
+      if(appUserId != "")
+      {
+        let cartItemReq = new ShoppingCartItemRequestDto(cartItem.id,cartItem.product.id,
+                          cartItem.quantity,cartItem.shoppingCartId)
+        let cart = new ShoppingCartRequestDto(appUserId, [cartItemReq])
+        console.log("Created New Cart", cart);
+        this.cartService.addNewCart(cart);
+      }   
   }
 
-  /*---Increment product quantity in shopping cart---*/
-  updateCart()
-  {
-    if(this.cartItem)
+  incrementCartItemQuantity(cartItem : any) : void {
+    if(cartItem)
     {
-      this.cartItem.quantity = 1;
-      this.cartService.updateCart(this.cartItem);
+      if(this.cartItem)
+        this.cartItem.quantity = cartItem.quantity + 1;
+        cartItem.quantity = cartItem.quantity + 1;
+
+      let cartItemReq = new ShoppingCartItemRequestDto(cartItem.id,cartItem.product.id,
+      cartItem.quantity,cartItem.shoppingCartId)
+      console.log("Incremented quantity of existing cart Item", cartItemReq);
+      this.cartService.updateCartItem( cartItemReq);
     }
   }
 
-  /*---Increment product quantity in shopping cart---*/
-  incrementCart()
-  {
-    if(this.cartItem)
+  decrementCartItemQuantity(cartItem : any) : void {
+    if(cartItem)
     {
-      this.cartItem.quantity =  this.cartItem.quantity + 1;
-      this.cartService.updateCart(this.cartItem);
+      let quantity = cartItem.Quantity - 1;
+
+      //if updated quantity is greater than 0 , update quantity of product in cart   
+      if ((quantity || 0) > 0)
+      {
+        if(this.cartItem)
+         this.cartItem.quantity = quantity;
+        cartItem.quantity = quantity;
+
+        let cartItemReq = new ShoppingCartItemRequestDto(cartItem.id,cartItem.product.id,
+        cartItem.quantity,cartItem.shoppingCartId)
+        console.log("Decremented quantity of existing cart Item", cartItemReq);
+        this.cartService.updateCartItem( cartItemReq);
+      }
+      //else remove item from cart  
+      else {
+        cartItem.quantity = 0;
+        if(this.cartItem)
+          this.cartItem.quantity = 0;
+        console.log("Removed existing cart Item from cart", cartItem);
+        this.cartService.removeItemFromCart(cartItem.shoppingCartId)
     }
+   }
   }
-
-  /*---Decrement product quantity in shopping cart---*/
-  decrementCart()
-  {
-    if(this.cartItem)
-    {
-    this.cartItem.quantity =  this.cartItem.quantity - 1;
-    
-    //if updated quantity is greater than 0 , update quantity of product in cart   
-    if(this.cartItem.quantity > 0 )
-        this.cartService.updateCart(this.cartItem);
-    //if updated quantity is less than 0 ,remove item from cart  
-    else
-        this.cartService.removeFromCart(this.cartItem.product.Id+"" || "")
-    }
-  } 
-
-  /*---unsubscribe from user service once component is destroyed---*/
-  ngOnDestroy(): void {
-    this.userSubscription?.unsubscribe();
-  }
-
 }

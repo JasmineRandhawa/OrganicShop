@@ -13,5 +13,20 @@ export enum API {
     ADD_PRODUCT_URL  = "https://localhost:5001/Api/Products/Add",
     UPDATE_PRODUCT_URL  = "https://localhost:5001/Api/Products/Update",
     ACTIVATE_PRODUCT_URL  = "https://localhost:5001/Api/Products/Activate/",
-    DEACTIVATE_PRODUCT_URL  = "https://localhost:5001/Api/Products/Deactivate/"
+    DEACTIVATE_PRODUCT_URL  = "https://localhost:5001/Api/Products/Deactivate/",
+
+    GET_CART_BY_USER  = "https://localhost:5001/Api/ShoppingCart/User/",
+    GET_CART_BY_ID  = "https://localhost:5001/Api/ShoppingCart/",
+    ADD_CART_URL  = "https://localhost:5001/Api/ShoppingCart/Add",
+    ADD_CART_ITEM_URL  = "https://localhost:5001/Api/ShoppingCart/Item/Add",
+    UPDATE_CART_ITEM_URL  = "https://localhost:5001/Api/ShoppingCart/Item/Update",
+    DELETE_ITEM_FROM_CART_URL  = "https://localhost:5001/Api/ShoppingCart/Item/",
+    DELETE_ALL_FROM_CART_URL  = "https://localhost:5001/Api/ShoppingCart/All/",
+    DELETE__CART_URL  = "https://localhost:5001/Api/ShoppingCart/",
+
+    GET_USER_BY_ID_URL  = "https://localhost:5001/Api/Users",
+    ADD_USER_URL  = "https://localhost:5001/Api/Users/Add",
+    UPDATE_USER_URL  = "https://localhost:5001/Api/Users/Update",
+    ACTIVATE_USER_URL  = "https://localhost:5001/Api/Users/Activate/",
+    DEACTIVATE_USER_URL  = "https://localhost:5001/Api/Users/Deactivate/",
 };

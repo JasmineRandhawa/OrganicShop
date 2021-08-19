@@ -1,4 +1,3 @@
-import { AppUser } from 'src/app/models/app-user';
 import { UserService } from 'src/app/services/user.service';
 
 import { Injectable } from '@angular/core';
@@ -8,6 +7,9 @@ import firebase from 'firebase/app';
 
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import { AppUserService } from './app-user.service';
+import { showAlertOnAction } from '../utility/helper';
+import { AppUser } from '../models/domain/app-user';
 
 @Injectable()
 
@@ -16,7 +18,7 @@ export class AuthService  {
 
   /*---Inject angular fire database , router and user service---*/
   constructor(private fireAuth: AngularFireAuth, private userService: UserService,
-              private route: ActivatedRoute, private router: Router) {
+              private route: ActivatedRoute, private router: Router,private appUserService:AppUserService) {
   }
 
   /*---login and save user details from google sign to firebase database
@@ -27,7 +29,24 @@ export class AuthService  {
       localStorage.setItem('returnURL', returnURL);
 
     this.fireAuth.signInWithRedirect(new firebase.auth.GoogleAuthProvider())
-                 .then(()=>this.router.navigate(['/']));
+                 .then(()=>
+                 { 
+                   this.appUser$.pipe((map(async (appUser:AppUser|null)=>
+                   {
+                      if(appUser)
+                      {
+                        console.log(appUser);
+                        let response :any = await this.appUserService.getUserById(appUser.AppUserId);
+                        if(!response || (response && response.body as AppUser[]).length == 0)
+                        {
+                          console.log(response);
+                          //let isAdded = await this.appUserService.add(appUser);
+                          //if(isAdded)
+                           // showAlertOnAction("User" , isAdded, "create",this.router,"/")
+                        }
+                      }   
+                   })));
+                 });
   }
 
   /*---logout the user from application---*/

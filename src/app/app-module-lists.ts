@@ -1,3 +1,4 @@
+import { AppUserService } from './services/app-user.service';
 import { Provider } from '@angular/core';
 import { Routes } from '@angular/router';
 
@@ -48,7 +49,8 @@ export const services : Provider [] = [
   CategoryService,
   ProductService,
   ShoppingCartService,
-  OrderService
+  OrderService,
+  AppUserService
 ];
 
 /*---routes---*/
@@ -63,7 +65,7 @@ export const routes: Routes = [
   { path: 'admin/products/:id', component: ProductFormComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
   { path: 'admin/products', component: AdminProductsComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
   { path: 'admin/categories/new', component: CategoryFormComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
-  { path: 'admin/categories/:Name', component: AdminCategoriesComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
+  { path: 'admin/categories/:category', component: AdminCategoriesComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
   { path: 'admin/categories', component: AdminCategoriesComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
   { path: 'admin/manage-products', component: AdminManageProductsComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},
   { path: 'admin/orders', component: AdminOrdersComponent , canActivate : [AuthGuardService,AdminAuthGuardService]},

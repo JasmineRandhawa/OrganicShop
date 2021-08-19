@@ -1,6 +1,5 @@
-import { ShoppingCartItem } from 'src/app/models/shopping-cart-item';
-
 import { Component, Input} from '@angular/core';
+import { ShoppingCartItemDto } from '../../../models/data-transfer-objects/ApiResponses/shopping-cart-item-dto';
 
 @Component({
   selector: 'product-card',
@@ -11,5 +10,7 @@ import { Component, Input} from '@angular/core';
 export class ProductCardComponent{
 
   /*---class property declarations---*/
-  @Input('cart-item') cartItem: ShoppingCartItem | undefined
+  @Input('cart-item') cartItem : ShoppingCartItemDto | undefined;
+  @Input('app-user-id') appUserId : string |undefined
+ 
 }

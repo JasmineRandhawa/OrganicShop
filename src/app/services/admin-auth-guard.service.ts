@@ -2,8 +2,8 @@ import { AuthService } from 'src/app/services/auth.service';
 
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot } from '@angular/router';import { Observable } from 'rxjs';
-import { AppUser } from '../models/app-user';
 import { map } from 'rxjs/operators';
+import { AppUser } from '../models/domain/app-user';
 ;
 
 @Injectable()
@@ -24,7 +24,7 @@ export class AdminAuthGuardService implements CanActivate {
                 .pipe(map((user: AppUser | null) => {
                   // if current logged in user is an admin user 
                   // then user can access the requested page
-                  if (user && user.isAdmin) return true;
+                  if (user && user.IsAdmin) return true;
 
                   //else user is redirected to the not-admin page to 
                   // inform user of no-access

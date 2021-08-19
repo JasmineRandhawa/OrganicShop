@@ -18,7 +18,7 @@
             <div class="form-group formGroupCSS">
                 <label for="name" class="formLabelCSS">Name</label>
                 <input #name="ngModel" name="name" id="name" 
-                       [(ngModel)]="cart.user.name"  
+                       [(ngModel)]="cart.appUserName"  
                        class="form-control formControlCSS" type="text" required />
                 <div *ngIf="name.touched && name.invalid" class="alert alert-danger">
                     <div *ngIf="name.errors?.required">The name field is a required.</div>
@@ -69,7 +69,7 @@
 
             <!---Data Rows--->
             <tr *ngFor="let item of cart.items">
-                <td>{{item.quantity}} X {{item.product.Title}}</td>
+                <td>{{item.quantity}} X {{item.product.title}}</td>
                 <td><span> {{item.totalPricePerProduct | currency:'USD' : true}}</span></td>
             </tr>
 

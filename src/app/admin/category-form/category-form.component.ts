@@ -1,9 +1,11 @@
-import { Category } from 'src/app/models/category';
-import { CategoryService } from 'src/app/services/category.service';
-import { showAlertOnAction } from 'src/app/utility/helper';
-
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+
+import { CategoryDto } from 'src/app/models/data-transfer-objects/ApiResponses/category-dto';
+import { Category } from 'src/app/models/domain/category';
+
+import { CategoryService } from 'src/app/services/category.service';
+import { showAlertOnAction } from 'src/app/utility/helper';
 
 @Component({
   selector: 'category-form',
@@ -12,15 +14,16 @@ import { Router } from '@angular/router';
 })
 export class CategoryFormComponent {
 
-  category : Category = new Category();
+  category : CategoryDto = new CategoryDto();
 
-  /*----initialize properties from firebase----*/ 
-  constructor(private categoryService: CategoryService, private router: Router) {   
+  /*----initialize data from API response----*/ 
+  constructor(private categoryService : CategoryService , private router : Router) {   
   }
 
   /*---add new category---*/ 
-  async onSave(category:Category) {
+  async onSave(categoryDto : CategoryDto) : Promise<void>  {
+    let category : Category = new Category(categoryDto);
     let isSaved = await this.categoryService.add(category);
-    showAlertOnAction("Category" , isSaved, "create",this.router,"/admin/categories")
+    showAlertOnAction("Category" , isSaved , "create" , this.router , "/admin/categories")
   }
 }

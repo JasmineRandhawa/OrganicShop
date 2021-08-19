@@ -1,10 +1,10 @@
-import { AppUser } from 'src/app/models/app-user';
 
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase  } from '@angular/fire/database';
 import  firebase  from 'firebase/app';
 
 import { Observable } from 'rxjs';
+import { AppUser } from '../models/domain/app-user';
 
 @Injectable()
 

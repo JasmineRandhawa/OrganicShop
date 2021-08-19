@@ -1,19 +1,19 @@
 <!--Product Card-->
 <div class="card cardDivCSS"  *ngIf="cartItem" style="width: 15rem;">
 
-    <img class="card-img-top imageCSS" src="{{cartItem.product.ImageURL}}" 
+    <img class="card-img-top imageCSS" src="{{cartItem.product.imageURL}}" 
          alt="Image not available">
 
     <!--Card Body-->
     <div class="card-body">
-        <h5 class="card-title">{{ cartItem.product.Title }}</h5>
-        <p class="card-text">{{ cartItem.product.Price | currency : 'USD':"$"}}</p>
-        <p class="card-text">{{ cartItem.product.Category.Name }}</p>
+        <h5 class="card-title">{{ cartItem.product.title }}</h5>
+        <p class="card-text">{{ cartItem.product.price | currency : 'USD':"$"}}</p>
+        <p class="card-text">{{ cartItem.product.category }}</p>
     </div>
 
      <!--Card Footer-->
-    <div class="card-footer">
-        <quantity-card [cart-item] = "cartItem"></quantity-card>
+    <div class="card-footer" *ngIf="cartItem && cartItem.product">
+        <quantity-card [cart-item] = "cartItem" [app-user-id]="appUserId" ></quantity-card>
     </div>
 
 </div>

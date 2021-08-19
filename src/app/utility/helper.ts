@@ -7,7 +7,7 @@ export function compare(str1:string,str2:string):boolean
 }
 
 //checks if a string is empty
-export function isEmpty(str:string|undefined|null):boolean
+export function isEmpty(str:string|undefined|null) : boolean
 {
   return (str != undefined && str != null && str.trim()!=="") ? false : true;
 }

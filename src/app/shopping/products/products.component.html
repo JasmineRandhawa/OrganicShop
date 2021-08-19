@@ -12,7 +12,7 @@
         <div class="row" *ngIf="isAnyItems">
             <ng-container *ngFor="let item of filteredItems let i = index;">
                 <div class="col">
-                   <product-card [cart-item]="item"></product-card>
+                   <product-card [cart-item]="item" [app-user-id]="appUser.AppUserId" ></product-card>
                 </div>
                 <div *ngIf="(i+1)%3===0" class="w-100"></div>
             </ng-container>

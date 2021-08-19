@@ -1,13 +1,14 @@
-import { Category } from 'src/app/models/category';
-import { API } from 'src/app/services/api-service-urls';
-
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
+import { API } from 'src/app/services/api-service-urls';
+import { Category } from '../models/domain/category';
 
 @Injectable()
 
-/*---Category Service to get category data to and from database---*/
+/*---Category Service to get/add/update/delete category data to and from API---*/
 export class CategoryService {
 
   headerOptions : object = {observe : 'response'};
@@ -17,36 +18,56 @@ export class CategoryService {
   }
 
   /*---get all active categories---*/
-  getAllActive = () => this.http.get(API.GET_ALL_ACTIVE_CATEGORIES_URL,this.headerOptions);
+  getAllActive = () : Observable<any> => 
+      this.http.get(API.GET_ALL_ACTIVE_CATEGORIES_URL , this.headerOptions)
+                .pipe(
+                  catchError((error) => this.handleError(error))
+                );
 
-   /*---get all categories---*/
-  getAll= () => this.http.get(API.GET_ALL_CATEGORIES_URL,this.headerOptions);
+  /*---get all categories---*/
+  getAll = () : Observable<any> => 
+      this.http.get(API.GET_ALL_CATEGORIES_URL , this.headerOptions)
+                .pipe(
+                  catchError((error) => this.handleError(error))
+                );
 
   /*---get category by id---*/
-  getById = (categoryId:number) => this.http.get(API.GET_CATEGORY_BY_ID_URL + categoryId , 
-                                                this.headerOptions) ;
+  getById = (categoryId : number) : Observable<any> => 
+      this.http.get(API.GET_CATEGORY_BY_ID_URL + categoryId , this.headerOptions)
+                .pipe(
+                  catchError((error) => this.handleError(error))
+                );
 
   /*---add a new category--*/
-   add = (category:Category) => this.http.post(API.ADD_CATEGORY_URL,category,this.headerOptions)
-                                            .toPromise()
-                                            .then((response:any)=> response.status == 201)
-                                            .catch(() => false);
+  add = (category : Category) : Promise<Boolean> => 
+    this.http.post(API.ADD_CATEGORY_URL , category , this.headerOptions)
+              .toPromise()
+              .then((response : any) => response.status == 201)
+              .catch(() => false);
 
   /*---update category details---*/
-  update = (category:Category) =>  this.http.patch(API.UPDATE_CATEGORY_URL,category,this.headerOptions)
-                                            .toPromise()
-                                            .then((response:any)=> response.status == 200)
-                                            .catch(() => false);
+  update = (category : Category) : Promise<Boolean> =>  
+      this.http.patch(API.UPDATE_CATEGORY_URL , category , this.headerOptions)
+                .toPromise()
+                .then((response : any) => response.status == 200)
+                .catch(() => false);
 
   /*---activate a category--*/
-  activate = (categoryId:number) => this.http.patch(API.ACTIVATE_CATEGORY_URL+categoryId ,{},this.headerOptions)
-                                            .toPromise()
-                                            .then((response:any)=> response.status == 200)
-                                            .catch(() => false);
+  activate = (categoryId : number) : Promise<Boolean> => 
+      this.http.patch(API.ACTIVATE_CATEGORY_URL + categoryId , {} , this.headerOptions)
+                .toPromise()
+                .then((response : any)=> response.status == 200)
+                .catch(() => false);
 
-   /*---deactivate a category--*/
-   deactivate = (categoryId:number) => this.http.patch(API.DEACTIVATE_CATEGORY_URL + categoryId ,{},this.headerOptions)
-                                                .toPromise()
-                                                .then((response:any)=> response.status == 200)
-                                                .catch(() => false);
+  /*---deactivate a category--*/
+  deactivate = (categoryId:number) : Promise<Boolean> => 
+      this.http.patch(API.DEACTIVATE_CATEGORY_URL + categoryId , {} , this.headerOptions)
+                .toPromise()
+                .then((response : any) => response.status == 200)
+                .catch(() => false);
+
+  handleError(error: any): any {
+      console.log("An unexpected error occured! from api service. " , error);
+      return of(null);
+  }  
 }

@@ -1,12 +1,13 @@
 <!--Product Quantity Card-->
-<button *ngIf="!cartItem || (cartItem  && cartItem.quantity == 0)" class="btn buttonCSS" (click)="addToCart()">
+<button *ngIf="!cartItem || (cartItem  && cartItem.quantity == 0)" class="btn buttonCSS" 
+(click)="addToCart(cartItem , appUserId)">
     Add to Cart
 </button>
 
 <div *ngIf="cartItem && cartItem.quantity > 0">
 
-    <button class="btn buttonCartCSS" (click)="decrementCart()">-</button>
+    <button class="btn buttonCartCSS" (click)="decrementCartItemQuantity(cartItem)">-</button>
     <span class="quantityCSS">{{cartItem.quantity}} in cart</span>
-    <button class="btn buttonCartCSS" (click)="incrementCart()">+</button>
+    <button class="btn buttonCartCSS" (click)="incrementCartItemQuantity(cartItem)">+</button>
 
 </div>

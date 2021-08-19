@@ -25,24 +25,24 @@
       </li>
 
       <!--Shopping cart link-->
-      <!-- <li *ngIf="appUser" class="nav-item">
+      <li *ngIf="appUser" class="nav-item">
         <a class="nav-link" routerLink="/shopping-cart">
           <span>
               <i class="fa fa-shopping-cart fa-1x cartIconCSS"></i>
-              <span  *ngIf="cartItemsCount && cartItemsCount>0" id="cartCount" 
+              <span  *ngIf="cartItemsCount && cartItemsCount > 0" id="cartCount" 
                       class="badge badge-warning">
                 {{cartItemsCount}}
               </span>
           </span>
         </a>
-      </li> -->
+      </li> 
 
        <!--Username Dropdown link-->
       <li *ngIf="appUser" ngbDropdown class="nav-item dropdown">
 
          <!--Logged In Username-->
         <a ngbDropdownToggle class="nav-link dropdown-toggle" data-toggle="dropdown">
-          <span class="linkLabelCSS">{{appUser.name }}</span>
+          <span class="linkLabelCSS">{{appUser.Name }}</span>
         </a>
 
         <!--Dropdown options-->
@@ -52,22 +52,22 @@
               My Orders
           </a> -->
 
-          <a *ngIf="appUser.isAdmin" ngbDropdownItem class="dropdown-item" 
+          <a *ngIf="appUser.IsAdmin" ngbDropdownItem class="dropdown-item" 
               routerLink="/admin/products">
               Manage Products
           </a>
 
-          <a *ngIf="appUser.isAdmin" ngbDropdownItem class="dropdown-item" 
+          <a *ngIf="appUser.IsAdmin" ngbDropdownItem class="dropdown-item" 
               routerLink="/admin/manage-products">
               Manage Products (Pag)
           </a>
 
-          <a *ngIf="appUser.isAdmin" ngbDropdownItem class="dropdown-item" 
+          <a *ngIf="appUser.IsAdmin" ngbDropdownItem class="dropdown-item" 
               routerLink="/admin/categories">
               Manage Categories
           </a>
 
-        <!--   <a *ngIf="appUser.isAdmin" ngbDropdownItem class="dropdown-item" 
+        <!--   <a *ngIf="appUser.IsAdmin" ngbDropdownItem class="dropdown-item" 
               routerLink="/admin/orders">
               Manage Orders
           </a> -->
