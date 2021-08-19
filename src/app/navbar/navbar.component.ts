@@ -3,6 +3,9 @@ import { Observable, of } from 'rxjs';
 
 import { AppUser } from '../models/domain/app-user';
 import { AuthService } from 'src/app/services/auth.service';
+import { ShoppingCartResponseDto } from '../models/data-transfer-objects/ApiResponses/shopping-cart-dto';
+import { ShoppingCartService } from '../services/shopping-cart.service';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'navbar',
@@ -14,29 +17,46 @@ import { AuthService } from 'src/app/services/auth.service';
 export class NavbarComponent {
 
   /*----class property declarations----*/ 
-  appUser : AppUser | undefined;
-  cartItemsCount : number = 0;
-  @Input('cart-items-count') cartItemsCount$ : Observable<number> = of(0);
+  appUser : AppUser | null = new AppUser();
+  c:number=0
+  @Input('cart-items-count') cartItemsCount : Observable<number|undefined> | undefined ;
+  
 
   /*----Inject auth service----*/ 
-  constructor(private auth : AuthService) {
+  constructor(private auth : AuthService,private cartService: ShoppingCartService) {
 
     //get logged in user from auth service
     this.auth.appUser$.subscribe((appUser:AppUser|null) => 
                       {
-                        if(appUser)
-                        {
                           Object.assign(this.appUser , appUser);
-                        }
                       });
+                      this.getCartCount();
+  }
 
-    this.cartItemsCount$.subscribe(cartCount => this.cartItemsCount =  cartCount)
+  getCartCount()
+  {
+    let cartId = localStorage.getItem('cartId');
+    if (cartId && cartId!="") 
+    {
+      this.cartService.getCartById(+cartId).subscribe((response : any)=> {
+      if(response && response.status==200)
+      {
+        let cart = response.body as ShoppingCartResponseDto;
+        let cartObj = new ShoppingCartResponseDto(cart.id, cart.appUserId, cart.appUserName,
+                        cart.items);
+        this.c = cartObj.totalItemsCount;
+        return cartObj.totalItemsCount
+      }
+      return undefined;
+    });
+    }
+    return undefined;
   }
 
   /*----logout from application----*/ 
   logout() : void
   {
-    this.appUser = undefined;
+    this.appUser = null;
     this.auth.logout();
   }
 }

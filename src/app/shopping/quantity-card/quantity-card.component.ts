@@ -1,8 +1,11 @@
 import { Component, Input } from '@angular/core';
+
 import { ShoppingCartItemDto } from '../../models/data-transfer-objects/ApiResponses/shopping-cart-item-dto';
+import { ShoppingCartRequestDto } from '../../models/data-transfer-objects/ApiRequests/shopping-cart-request-dto';
+import { ShoppingCartItemRequestDto } from '../../models/data-transfer-objects/ApiRequests/shopping-cart-item-request-dto';
+
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
-import { ShoppingCartRequestDto } from 'src/app/models/data-transfer-objects/ApiRequests/shopping-cart-request-dto';
-import { ShoppingCartItemRequestDto } from 'src/app/models/data-transfer-objects/ApiRequests/shopping-cart-item-request-dto';
+import { ShoppingCartResponseDto } from 'src/app/models/data-transfer-objects/ApiResponses/shopping-cart-dto';
 
 @Component({
   selector: 'quantity-card',
@@ -20,13 +23,18 @@ export class QuantityCardComponent {
 
    }
  
-  addToCart(cartItem : ShoppingCartItemDto | undefined , appUserId : any) {
+  addToCart(cartItem : ShoppingCartItemDto | undefined , appUserId : string | undefined) {
     if(cartItem)
     {
-      if (cartItem.shoppingCartId > 0) 
+      let cartId = localStorage.getItem('cartId');
+      if (cartId && cartId!="") 
+      {
+        if(this.cartItem)
+          this.cartItem.shoppingCartId = +cartId;
         this.addCartItemToExistingCart(cartItem);
+      }
       else
-        this.createNewCartWithCartItem(cartItem,appUserId);
+        this.createNewCartWithCartItem(cartItem , appUserId);
     }
   }
 
@@ -34,57 +42,81 @@ export class QuantityCardComponent {
       cartItem.quantity = 1;
       if(this.cartItem)
         this.cartItem.quantity = 1;
-      console.log("Added cart Item to existing Cart" ,  cartItem);
 
-      let newItemId = await this.cartService.addCartItem(cartItem);
-      if(newItemId && newItemId!="" && this.cartItem) 
-        this.cartItem.id = +newItemId;          
+      let cartItemReq = new ShoppingCartItemRequestDto(cartItem.id , cartItem.product.id ,
+                                                       cartItem.quantity , cartItem.shoppingCartId)
+      console.log("Added cart Item to existing Cart" ,  cartItemReq);
+      let newItemId = await this.cartService.addCartItem(cartItemReq);
+      if(newItemId && newItemId > 0 && this.cartItem) 
+        this.cartItem.id =  newItemId;          
   }
 
-  createNewCartWithCartItem(cartItem : ShoppingCartItemDto , 
-                            appUserId : string|undefined) : void {
+  async createNewCartWithCartItem(cartItem : ShoppingCartItemDto , 
+                                  appUserId : string | undefined) : Promise<void> {
+      console.log(this.cartItem)
       cartItem.quantity = 1;
       if(this.cartItem)
       this.cartItem.quantity = 1;
       if(appUserId != "")
       {
-        let cartItemReq = new ShoppingCartItemRequestDto(cartItem.id,cartItem.product.id,
-                          cartItem.quantity,cartItem.shoppingCartId)
+        let cartItemReq = new ShoppingCartItemRequestDto(cartItem.id , cartItem.product.id ,
+                                                         cartItem.quantity , cartItem.shoppingCartId)
         let cart = new ShoppingCartRequestDto(appUserId, [cartItemReq])
-        console.log("Created New Cart", cart);
-        this.cartService.addNewCart(cart);
+        console.log("Created New Cart", cartItemReq);
+        let newCart  = await this.cartService.addNewCart(cart);
+        if(newCart) 
+        {
+          if(newCart.items)
+          {
+            //console.log(newCart.items);
+            let cartItem = newCart.items.filter(item =>item.product.id == cartItemReq.ProductId)[0];
+            //console.log(cartItem);
+            if(cartItem && this.cartItem)
+              this.cartItem.id = cartItem.id;
+          }
+          if(this.cartItem) 
+          {
+            let cartId = localStorage.getItem('cartId');
+            if(!cartId || cartId =="")
+            {
+              this.cartItem.shoppingCartId = newCart.id; 
+              localStorage.setItem('cartId', newCart.id+"");
+            }
+              
+          }
+          console.log(this.cartItem)
+        }
+       
       }   
   }
 
-  incrementCartItemQuantity(cartItem : any) : void {
+  incrementCartItemQuantity(cartItem : ShoppingCartItemDto | undefined) : void {
     if(cartItem)
     {
       if(this.cartItem)
         this.cartItem.quantity = cartItem.quantity + 1;
-        cartItem.quantity = cartItem.quantity + 1;
 
-      let cartItemReq = new ShoppingCartItemRequestDto(cartItem.id,cartItem.product.id,
-      cartItem.quantity,cartItem.shoppingCartId)
-      console.log("Incremented quantity of existing cart Item", cartItemReq);
+      let cartItemReq = new ShoppingCartItemRequestDto(cartItem.id , cartItem.product.id ,
+                                                       cartItem.quantity , cartItem.shoppingCartId)
+     // console.log("Incremented quantity of existing cart Item", cartItemReq);
       this.cartService.updateCartItem( cartItemReq);
     }
   }
 
-  decrementCartItemQuantity(cartItem : any) : void {
+  async decrementCartItemQuantity(cartItem : ShoppingCartItemDto | undefined) : Promise<void> {
     if(cartItem)
     {
-      let quantity = cartItem.Quantity - 1;
+      let quantity = cartItem.quantity - 1;
 
       //if updated quantity is greater than 0 , update quantity of product in cart   
       if ((quantity || 0) > 0)
       {
         if(this.cartItem)
          this.cartItem.quantity = quantity;
-        cartItem.quantity = quantity;
 
-        let cartItemReq = new ShoppingCartItemRequestDto(cartItem.id,cartItem.product.id,
-        cartItem.quantity,cartItem.shoppingCartId)
-        console.log("Decremented quantity of existing cart Item", cartItemReq);
+        let cartItemReq = new ShoppingCartItemRequestDto(cartItem.id , cartItem.product.id,
+                                                         cartItem.quantity , cartItem.shoppingCartId)
+        //console.log("Decremented quantity of existing cart Item", cartItemReq);
         this.cartService.updateCartItem( cartItemReq);
       }
       //else remove item from cart  
@@ -93,7 +125,9 @@ export class QuantityCardComponent {
         if(this.cartItem)
           this.cartItem.quantity = 0;
         console.log("Removed existing cart Item from cart", cartItem);
-        this.cartService.removeItemFromCart(cartItem.shoppingCartId)
+        let isRemoved = await this.cartService.removeItemFromCart(cartItem.id);
+        if(isRemoved && this.cartItem)
+           this.cartItem.id = 0;
     }
    }
   }

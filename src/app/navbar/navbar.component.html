@@ -29,9 +29,9 @@
         <a class="nav-link" routerLink="/shopping-cart">
           <span>
               <i class="fa fa-shopping-cart fa-1x cartIconCSS"></i>
-              <span  *ngIf="cartItemsCount && cartItemsCount > 0" id="cartCount" 
+              <span  *ngIf="c" id="cartCount" 
                       class="badge badge-warning">
-                {{cartItemsCount}}
+                {{c}}
               </span>
           </span>
         </a>

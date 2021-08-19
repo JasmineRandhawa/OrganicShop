@@ -76,6 +76,7 @@ export class ProductsComponent implements OnDestroy {
                                     if (response && response.status == 200) {
                                       let shoppingCartDto = response.body as ShoppingCartResponseDto
                                       this.cart = shoppingCartDto;
+                                      localStorage.setItem('cartId',this.cart.id + "");
                                       this.updateCartDataIntoItems();
                                     }
                                   });    

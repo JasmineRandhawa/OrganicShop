@@ -1,15 +1,14 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import firebase from 'firebase/app';
 
 import { Subscription, of, Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-import { ShoppingCartResponseDto } from './models/data-transfer-objects/ApiResponses/shopping-cart-dto';
-
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
 import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
+import { ShoppingCartResponseDto } from './models/data-transfer-objects/ApiResponses/shopping-cart-dto';
 
 @Component({
   selector: 'app-root',
@@ -18,11 +17,13 @@ import { ShoppingCartService } from 'src/app/services/shopping-cart.service';
 })
 
 /*---Main Parent component of application---*/
-export class AppComponent implements  OnDestroy {
+export class AppComponent implements  OnInit,OnDestroy {
 
   /*---class property declarations---*/
   title = 'organic-shop';
   userId : string = "";
+  cartItemsCount : number = 0;
+  cart:ShoppingCartResponseDto|undefined;
   cartSubscription : Subscription | undefined;
   userSubscriotion : Subscription | undefined;
 
@@ -30,33 +31,51 @@ export class AppComponent implements  OnDestroy {
   constructor(private userService : UserService , private authService : AuthService,
               private router : Router, private cartService : ShoppingCartService) {
 
-     /*---Navigating user to return url if user is logged in---*/
-     this.userSubscriotion =  this.authService.user$
-                              .subscribe((user : firebase.User |null | undefined) =>
-                              {
-                                if(user && user.uid)
-                                {
-                                  this.userService.save(user);
-                                  this.userId = user.uid;
-                                  this.navigateToReturnURL();
-                                }
-                              });
+     
   }
 
-  /*---subscrivbe to cart service to get shopping-cart data for logged in user if any---*/
-  get cartItemsCount$() : Observable<number>
+  get CartCount()
   {
-    return this.authService.user$.pipe(map((user:firebase.User |null | undefined) =>
-                                      this.cartService.getCartByUser(user ? user.uid || "" : "")
-                                  )).pipe(switchMap((response : any)=> {
-                                      if(response && response.status==200)
-                                      {
-                                        let cart= response.body as ShoppingCartResponseDto;
-                                        return of(cart.totalItemsCount);
-                                      }
-                                      return of(0);
-                                    }));
+    let cartId = localStorage.getItem('cartId');
+    if (cartId && cartId!="") 
+    {
+      return this.cartService.getCartById(+cartId).pipe(map((response : any)=> {
+        this.cartItemsCount = 0;
+      if(response && response.status==200)
+      {
+        let cart = response.body as ShoppingCartResponseDto;
+        this.cart = new ShoppingCartResponseDto(cart.id, cart.appUserId, cart.appUserName,
+                        cart.items);
+        
+        this.cartItemsCount = this.cart.totalItemsCount;
+        return this.cartItemsCount
+      }
+      return undefined;
+    }));
+    }
+    return undefined;
   }
+
+  ngOnInit(): void {
+    /*---Navigating user to return url if user is logged in---*/
+      let cartId = localStorage.getItem('cartId');
+      if (cartId && cartId!="") 
+      {
+        this.cartService.getCartById(+cartId).subscribe((response : any)=> {
+          this.cartItemsCount = 0;
+        if(response && response.status==200)
+        {
+          let cart = response.body as ShoppingCartResponseDto;
+          this.cart = new ShoppingCartResponseDto(cart.id, cart.appUserId, cart.appUserName,
+                         cart.items);
+          
+          this.cartItemsCount = this.cart.totalItemsCount;
+        }
+      });
+    }
+      this.navigateToReturnURL();
+    }
+  
   
   /*---Navigate to return URl if any---*/
   private navigateToReturnURL() : void
